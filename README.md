@@ -1,23 +1,27 @@
-# ChatGPT — звук завершения ответа
+# ChatGPT Answer Completion Sound
 
-Chrome Manifest V3. Отслеживает data-sidebar-indicator="working" в строках боковой панели ChatGPT.
-Когда у наблюдаемого чата исчезает working, воспроизводит короткий тон. Работает и для
-фоновых диалогов, если они отображаются в боковой панели открытой вкладки ChatGPT.
+A Chrome Manifest V3 extension that plays a short sound when ChatGPT finishes responding.
 
-## Установка
-1. Откройте chrome://extensions.
-2. Включите «Режим разработчика».
-3. Выберите «Загрузить распакованное расширение».
-4. Укажите эту папку (chatgpt-answer-sound).
-5. Обновите открытые вкладки ChatGPT. Нажмите иконку расширения → «Проверить звук».
+It monitors the `data-sidebar-indicator="working"` attribute on conversations in the ChatGPT sidebar. When a conversation transitions from working to idle, the extension plays a short tone. This also works for background conversations visible in the sidebar of an open ChatGPT tab.
 
-## Детали
-- content.js слушает изменения DOM через MutationObserver, без опроса по таймеру.
-- background.js исключает повторы между вкладками по ID диалога (окно 2,5 с).
-- offscreen.js воспроизводит синтезированный звук через Web Audio.
-- popup.html — включение/выключение и тест.
+## Installation
 
-Ограничения: не отслеживаются диалоги, отсутствующие в DOM боковой панели;
-при закрытых вкладках ChatGPT отслеживание не работает. Исчезновение working
-само по себе не позволяет надёжно отличить успешный ответ от ошибки или отмены.
-DOM ChatGPT может измениться с обновлением сайта.
+1. Open `chrome://extensions`.
+2. Enable **Developer mode**.
+3. Click **Load unpacked**.
+4. Select the `chatgpt-answer-sound` folder.
+5. Reload any open ChatGPT tabs. Click the extension icon, then **Test sound** (shown as **Проверить звук** in the current popup).
+
+## How it works
+
+- `content.js` watches sidebar DOM changes with `MutationObserver` instead of polling.
+- `background.js` deduplicates notifications across tabs by conversation ID using a 2.5-second window.
+- `offscreen.js` generates a short tone using the Web Audio API.
+- `popup.html` provides an on/off switch and a test button.
+
+## Limitations
+
+- Conversations that are not present in the sidebar DOM cannot be monitored.
+- Detection requires at least one open ChatGPT tab.
+- The disappearance of the `working` indicator does not reliably distinguish successful completion from an error or cancellation.
+- Changes to the ChatGPT website's DOM may break detection.
