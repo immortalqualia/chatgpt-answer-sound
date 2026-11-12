@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "ChatGPT — звук завершения ответа",
+  "version": "1.0.0",
+  "description": "Звук, когда ChatGPT заканчивает ответ в любом диалоге, отображаемом в боковой панели.",
+  "permissions": ["offscreen", "storage"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://chatgpt.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "Звук завершения ChatGPT",
+    "default_popup": "popup.html"
+  }
+}
